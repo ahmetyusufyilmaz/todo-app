@@ -1,0 +1,67 @@
+<div class="container">
+<h4><u>To Do List</u></h4>
+<button routerLink="/create-task" class="btn btn-success btn-sm">Create Task</button>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Assignee</th>
+      <th>Status</th>
+      <th>Details</th>
+      <th>Edit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let task of tasks" [class.table-success]="task.status === 'done'" [class.table-warning]="task.status === 'in progress'">
+      <td>{{ task.title }}</td>
+      <td>{{ task.assigneeName }}</td>
+      <td>
+        <select (change)="updateStatus(task, $event)"[disabled]="task.state">
+          <option [value]="'to do'">To Do</option>
+          <option [value]="'in progress'">In Progress</option>
+          <option [value]="'done'">Done</option>
+        </select>
+        
+      </td>
+      <td><button (click)="showTaskDetails(task)">Show Task Details</button></td>
+      <td><button (click)="editTask(task)" class="btn btn-warning" [disabled]="task.state">Edit</button></td> <!-- Added "Edit" button -->
+   
+    </tr>
+    
+  </tbody>
+</table>
+<div *ngIf="selectedTask; else createForm">
+  <h3>Edit Task</h3>
+  <form (ngSubmit)="updateTask(selectedTask)">
+   <div class="container"> <label class="label">Title:</label>
+    <input type="text" class="input" [(ngModel)]="selectedTask.title" name="title" required>
+  
+    <label class="label">Description:</label>
+    <input type="text" class="input" [(ngModel)]="selectedTask.description" name="description" required>
+
+    <label class="label">Assignee:</label>
+    <input type="text" class="input" [(ngModel)]="selectedTask.assigneeName" name="assignee" required>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <button (click)="cancelEdit()" class="btn btn-danger">Cancel</button></div>
+  </form>
+</div>
+<ng-template #createForm>
+<div *ngIf="showCreateForm">
+  <h3>Create New Task</h3>
+  <form (ngSubmit)="saveTask(newTask)">
+    <label>Title:</label>
+    <input type="text" [(ngModel)]="newTask.title" name="title" required>
+
+    <label>Description:</label>
+    <input type="text" [(ngModel)]="newTask.description" name="description" required>
+
+    <label>Assignee:</label>
+    <input type="text" [(ngModel)]="newTask.assigneeName" name="assignee" required>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <button (click)="cancelCreate()" class="btn btn-danger">Cancel</button>
+  </form>
+</div>
+
+</ng-template></div>
