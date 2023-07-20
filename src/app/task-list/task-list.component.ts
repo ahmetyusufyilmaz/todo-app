@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../services/task.service';
 import { Task } from '../models/task.model';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-task-list',
@@ -13,13 +15,11 @@ export class TaskListComponent implements OnInit {
   showCreateForm: boolean = false;
   user="";
   newTask: Task = {
-    id: '',
     title: '',
     description: '',
     assigneeName: '',
     status: 'to do',
-    createdDate: new Date(),
-    updatedDate: new Date()
+    state:true
   };
 
 
@@ -29,7 +29,7 @@ export class TaskListComponent implements OnInit {
     { value: 'done', label: 'Done', class: 'bg-success' }
   ];
 
-  constructor(private taskService: TaskService) { }
+  constructor(private authService: AuthService,private router: Router,private taskService: TaskService) { }
 
   ngOnInit(): void {
     this.getTasks();
@@ -38,7 +38,13 @@ export class TaskListComponent implements OnInit {
    this.user= localStorage.getItem('token');
 
   }
+  logout(): void {
+    // AuthService kullanarak oturumu sonlandır
+    this.authService.logout();
 
+    // Login sayfasına yönlendir
+    this.router.navigate(['/login']);
+  }
 
   updateStatus(task: any, event: any) {
     task.status = event.target.value;
@@ -103,13 +109,10 @@ export class TaskListComponent implements OnInit {
   cancelCreate() {
     this.showCreateForm = false;
     this.newTask = {
-      id: '',
       title: '',
       description: '',
       assigneeName: '',
-      status: 'to do',
-      createdDate: new Date(),
-      updatedDate: new Date()
+      status: 'to do'
     };
   }
 

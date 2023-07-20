@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, catchError, throwError } from 'rxjs';
 import { Task } from '../models/task.model';
 
 @Injectable({
@@ -11,10 +11,16 @@ export class TaskService {
   
   constructor(private http: HttpClient) { }
   getTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(this.baseUrl);
+    return this.http.get<Task[]>(this.baseUrl)
+    .pipe(
+      catchError(this.handleError)
+    );
 }
 createTask(task: Task): Observable<Task> {
-  return this.http.post<Task>(this.baseUrl, task);
+  return this.http.post<Task>(this.baseUrl, task)
+  .pipe(
+    catchError(this.handleError));
+    console.log('asda');
 }
 
 updateTask(task: any): Observable<any> {
@@ -26,4 +32,15 @@ deleteTask(taskId: number): Observable<any> {
   const url = `${this.baseUrl}/${taskId}`;
   return this.http.delete<any>(url);
 }
-}
+private handleError(error: HttpErrorResponse) {
+  let errorMessage = 'An unknown error occurred';
+  if (error.error instanceof ErrorEvent) {
+    // Client-side errors
+    errorMessage = `Error: ${error.error.message}`;
+  } else {
+    // Server-side errors
+    errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+  }
+  console.error(errorMessage);
+  return throwError(errorMessage);
+}}

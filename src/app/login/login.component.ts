@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -9,12 +10,14 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   username: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService,private router: Router) {}
 
   onSubmit() {
     if (this.username.trim() !== '') {
       localStorage.setItem('username', this.username.trim());
+      this.authService.login();
       this.router.navigate(['/task-list']);
+     
     } else {
       // Kullanıcı adı alanı boşsa, burada gerekli işlemleri yapabilirsiniz.
       // Örneğin, bir uyarı gösterebilir veya hata mesajı verebilirsiniz.

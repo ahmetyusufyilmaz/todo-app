@@ -7,21 +7,21 @@ import { tap, delay } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  isLoggedIn = false;
+  private isLoggedInKey = 'isLoggedIn';
+  
   redirectUrl: string;
 
   constructor(
     private http: HttpClient,
   ) { }
-
-  login(): Observable<boolean> {
-    return of(true).pipe(
-      delay(1000),
-      tap(val => this.isLoggedIn = true)
-    );
+  isLoggedIn(): boolean {
+    return localStorage.getItem(this.isLoggedInKey) === 'true';}
+  login(): void {
+    localStorage.setItem(this.isLoggedInKey, 'true');
   }
-
+  
   logout(): void {
-    this.isLoggedIn = false;
+    localStorage.removeItem(this.isLoggedInKey);
+    
   }
 }

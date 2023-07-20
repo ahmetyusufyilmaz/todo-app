@@ -11,13 +11,11 @@ import { Router } from '@angular/router';
 export class CreateTaskComponent {
 
   newTask: Task = {
-    id: '',
     title: '',
     description: '',
-    createdDate: new Date(),
-    updatedDate: new Date(),
     status: 'to do',
-    assigneeName: ''
+    assigneeName: '',
+    state:false
   };
   statuses: { value: string; label: string; class: string }[] = [
     { value: 'to do', label: 'To Do', class: 'bg-danger' },
@@ -28,15 +26,16 @@ export class CreateTaskComponent {
   constructor(private taskService: TaskService, private router: Router) {}
 
   onSubmit() {
-    this.taskService.createTask(this.newTask).subscribe(
-      response => {
+    console.log('test');
+    this.taskService.createTask(this.newTask).subscribe({
+      next: (response: Task) => {
         console.log('New task created:', response);
         this.router.navigate(['/task-list']); // Yeni görev oluşturulduktan sonra task-list sayfasına yönlendir
       },
-      error => {
+      error: (error) => {
         console.error('Create error:', error);
       }
-    );
+    });
   }
 
   cancelCreate() {

@@ -1,6 +1,8 @@
 <div class="container">
-<h4><u>To Do List</u></h4>
 <button routerLink="/create-task" class="btn btn-success btn-sm">Create Task</button>
+<button class="btn btn-primary btn-sm" (click)="logout()">Logout</button>
+<br><br>
+<h4><u>To Do List</u></h4>
 <table class="table">
   <thead>
     <tr>
@@ -8,7 +10,7 @@
       <th>Assignee</th>
       <th>Status</th>
       <th>Details</th>
-      <th>Edit</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -24,7 +26,8 @@
         
       </td>
       <td><button (click)="showTaskDetails(task)">Show Task Details</button></td>
-      <td><button (click)="editTask(task)" class="btn btn-warning" [disabled]="task.state">Edit</button></td> <!-- Added "Edit" button -->
+      <td><button (click)="editTask(task)" class="btn btn-warning" [disabled]="task.state">Edit</button>
+       
    
     </tr>
     
